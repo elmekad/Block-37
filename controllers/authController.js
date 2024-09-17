@@ -1,39 +1,42 @@
-const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
+const bcrypt = require('bcrypt'); // For password hashing
 const User = require('../models/User');
 
-// Register a new user
-exports.register = async (req, res) => {
-  const { name, email, password } = req.body;
+exports.signup = async (req, res) => {
   try {
-    const existingUser = await User.findOne({ where: { email } });
-    if (existingUser) return res.status(400).json({ message: 'User already exists' });
-
+    const { username, password } = req.body;
     const hashedPassword = await bcrypt.hash(password, 10);
-    const user = await User.create({ name, email, password: hashedPassword });
 
-    const token = jwt.sign({ id: user.id }, process.env.JWT_SECRET, { expiresIn: '1h' });
-
-    res.status(201).json({ token, user: { id: user.id, name, email } });
-  } catch (err) {
-    res.status(500).json({ message: 'Server error' });
+    const user = await User.create({ username, password: hashedPassword });
+    res.json(user);
+  } catch (error) {
+    res.status(500).json({ error: 'Failed to create user' });
   }
 };
 
-// Log in a user
 exports.login = async (req, res) => {
-  const { email, password } = req.body;
   try {
+    const { email, password } = req.body;
+    console.log('Login attempt for:', email); // Add this line
     const user = await User.findOne({ where: { email } });
-    if (!user) return res.status(400).json({ message: 'Invalid credentials' });
+    console.log('User found:', user); // Add this line
+
+    if (!user) {
+        return res.status(401).json({ error: 'Invalid credentials' });
+    }
 
     const isMatch = await bcrypt.compare(password, user.password);
-    if (!isMatch) return res.status(400).json({ message: 'Invalid credentials' });
+    console.log('Password match:', isMatch); // Add this line
 
-    const token = jwt.sign({ id: user.id }, process.env.JWT_SECRET, { expiresIn: '1h' });
+    if (!isMatch) {
+        return res.status(401).json({ error: 'Invalid credentials' });
+    }
 
-    res.status(200).json({ token, user: { id: user.id, name: user.name, email: user.email } });
-  } catch (err) {
-    res.status(500).json({ message: 'Server error' });
-  }
+    const token = jwt.sign({ userId: user.id }, process.env.JWT_SECRET);
+    res.json({ token });
+} catch (error) {
+    console.error('Error during login:', error); // Add this line
+    res.status(500).json({ error: 'Failed to login' });
+}
+
 };

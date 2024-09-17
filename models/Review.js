@@ -1,17 +1,31 @@
 const { DataTypes } = require('sequelize');
-const { sequelize } = require('../config/db');
-const User = require('./User');
-const Product = require('./Product');
+const { sequelize } = require('../config/db'); 
+
 
 const Review = sequelize.define('Review', {
-  rating: { type: DataTypes.INTEGER, allowNull: false },
-  text: { type: DataTypes.TEXT, allowNull: false },
+  id: {
+    type: DataTypes.INTEGER,
+    autoIncrement: true,
+    primaryKey: true,
+  },
+  rating: {
+    type: DataTypes.INTEGER,
+    allowNull: false,
+  },
+  text: {
+    type: DataTypes.TEXT,
+    allowNull: false,
+  },
+  productId: {
+    type: DataTypes.INTEGER,
+    allowNull: false,
+  },
+  userId: {
+    type: DataTypes.INTEGER,
+    allowNull: false,
+  },
 }, {
-  timestamps: true,
+  timestamps: true, // Automatically creates 'createdAt' and 'updatedAt' fields
 });
-
-// Associations
-Review.belongsTo(User, { foreignKey: 'userId' });
-Review.belongsTo(Product, { foreignKey: 'productId' });
 
 module.exports = Review;

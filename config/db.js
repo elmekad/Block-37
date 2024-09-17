@@ -1,19 +1,19 @@
 const { Sequelize } = require('sequelize');
-require('dotenv').config(); // Load environment variables
+require('dotenv').config(); 
 
-// Initialize Sequelize with the PostgreSQL connection URI from .env
+// Create a new Sequelize instance using the URI from the .env file
 const sequelize = new Sequelize(process.env.PG_URI, {
   dialect: 'postgres',
-  logging: false,
+  logging: false, 
 });
 
 const connectDB = async () => {
   try {
-    await sequelize.authenticate(); // Test the connection
-    console.log('PostgreSQL connected successfully to the EcomClothes database');
+    await sequelize.authenticate();
+    console.log('Database connected successfully.');
   } catch (err) {
-    console.error(`Error connecting to PostgreSQL: ${err.message}`);
-    process.exit(1); // Exit process with failure
+    console.error('Unable to connect to the database:', err);
+    process.exit(1);
   }
 };
 

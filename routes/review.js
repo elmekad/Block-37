@@ -1,12 +1,17 @@
 const express = require('express');
 const { getReviews, addReview, updateReview, deleteReview } = require('../controllers/reviewController');
+const authMiddleware = require('../middleware/auth');
+const { sequelize } = require('../config/db'); // Correctly import sequelize instance
+
 
 const router = express.Router();
 
-// Define routes
-router.get('/:productId', getReviews); // Get all reviews for a product
-router.post('/:productId', addReview); // Add a new review for a product
-router.put('/:reviewId', updateReview); // Update an existing review
-router.delete('/:reviewId', deleteReview); // Delete a review
+// Public route: Get all reviews for a product
+router.get('/:productId', getReviews);
 
-module.exports = router; // Export the router object
+// Protected routes: Require JWT to add, update, or delete a review
+router.post('/:productId', authMiddleware, addReview);
+router.put('/:reviewId', authMiddleware, updateReview);
+router.delete('/:reviewId', authMiddleware, deleteReview);
+
+module.exports = router;
