@@ -28,7 +28,7 @@ const commentRoutes = require('./routes/comment');
 const orderRoutes = require('./routes/order');
 const cartRoutes = require('./routes/cart');
 
-// Use Routes
+// // Use Routes
 app.use('/api/auth', authRoutes);
 app.use('/api/products', productRoutes);
 app.use('/api/reviews', reviewRoutes);
@@ -42,8 +42,11 @@ app.use('/api/reviews', authenticateJWT, reviewRoutes);
 
 // Error Handling Middleware
 app.use((err, req, res, next) => {
-  console.error(err.stack);
-  res.status(500).json({ message: 'Server Error' });
+  console.error('Error:', err);
+  if (err instanceof SyntaxError && err.status === 400 && 'body' in err) {
+      return res.status(400).json({ message: 'Invalid JSON payload' });
+  }
+  next();
 });
 
 // Sync Sequelize models with the database

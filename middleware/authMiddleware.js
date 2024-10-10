@@ -1,6 +1,6 @@
 const express = require('express');
 const authenticateJWT = require('./middleware/auth');
-const userRoutes = require('./routes/user');
+// const userRoutes = require('./routes/');
 
 const app = express();
 

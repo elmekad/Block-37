@@ -1,8 +1,6 @@
 const express = require('express');
 const { getReviews, addReview, updateReview, deleteReview } = require('../controllers/reviewController');
-const authMiddleware = require('../middleware/auth');
-const { sequelize } = require('../config/db'); // Correctly import sequelize instance
-
+const {authenticateJWT} = require('../middleware/auth');
 
 const router = express.Router();
 
@@ -10,8 +8,8 @@ const router = express.Router();
 router.get('/:productId', getReviews);
 
 // Protected routes: Require JWT to add, update, or delete a review
-router.post('/:productId', authMiddleware, addReview);
-router.put('/:reviewId', authMiddleware, updateReview);
-router.delete('/:reviewId', authMiddleware, deleteReview);
+router.post('/:productId', authenticateJWT, addReview);
+router.put('/:reviewId', authenticateJWT, updateReview);
+router.delete('/:reviewId', authenticateJWT, deleteReview);
 
 module.exports = router;

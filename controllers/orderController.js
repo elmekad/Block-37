@@ -3,36 +3,64 @@ const Product = require('../models/Product');
 
 // Create a new order
 exports.createOrder = async (req, res) => {
-    const { items, totalAmount, shippingAddress } = req.body;
-
+    console.log('User making the request:', req.user);
     try {
-        const order = new Order({ userId: req.user.id, items, totalAmount, shippingAddress });
-        await order.save();
+        console.log('User making the request:', req.user);
+        const { items, totalAmount, shippingAddress } = req.body;
+        const userId = req.user.id;
+
+        const order = await Order.create({
+            userId,
+            items,
+            totalAmount,
+            shippingAddress
+        });
         res.status(201).json(order);
     } catch (err) {
+        console.error('Error creating order:', err);
         res.status(500).json({ message: 'Server error' });
     }
 };
+
+
 
 // Get a single order by ID
 exports.getOrderById = async (req, res) => {
     try {
-        const order = await Order.findById(req.params.orderId);
+        const orderId = req.params.orderId;
+    
+        const order = await Order.findByPk(orderId);
         if (!order) {
+            
             return res.status(404).json({ message: 'Order not found' });
         }
+
         res.status(200).json(order);
     } catch (err) {
+        console.error('Error fetching order:', err); // Log the error
         res.status(500).json({ message: 'Server error' });
     }
 };
 
+
+  
+
 // Get all orders for a user
 exports.getUserOrders = async (req, res) => {
     try {
-        const orders = await Order.find({ userId: req.params.userId });
+        const userId = req.params.userId;
+        console.log('Fetching orders for user with ID:', userId); // Log user ID
+
+        const orders = await Order.findAll({ where: { userId } }); // Use findAll to get all orders for the user
+        if (!orders || orders.length === 0) {
+            console.log('No orders found for user with ID:', userId); // Log if no orders found
+            return res.status(404).json({ message: 'No orders found' });
+        }
+
+        console.log('Found orders:', orders); // Log found orders
         res.status(200).json(orders);
     } catch (err) {
+        console.error('Error fetching orders:', err); // Log any errors
         res.status(500).json({ message: 'Server error' });
     }
 };
