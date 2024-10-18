@@ -6,6 +6,7 @@ exports.getProducts = async (req, res) => {
     const products = await Product.findAll();
     res.status(200).json(products);
   } catch (err) {
+    console.error('Error fetching products:', err); // Log the error
     res.status(500).json({ message: 'Server error' });
   }
 };
@@ -23,9 +24,9 @@ exports.getProductById = async (req, res) => {
 
 // Create a new product
 exports.createProduct = async (req, res) => {
-  const { name, description, price } = req.body;
+  const { name, description, price, imageurl } = req.body;
   try {
-    const product = await Product.create({ name, description, price });
+    const product = await Product.create({ name, description, price, imageurl });
     res.status(201).json(product);
   } catch (err) {
     res.status(500).json({ message: 'Server error' });
@@ -34,10 +35,10 @@ exports.createProduct = async (req, res) => {
 
 // Update an existing product
 exports.updateProduct = async (req, res) => {
-  const { name, description, price } = req.body;
+  const { name, description, price, imageurl } = req.body;
   try {
     const product = await Product.update(
-      { name, description, price },
+      { name, description, price, imageurl },
       { where: { id: req.params.id }, returning: true, plain: true }
     );
     if (!product) return res.status(404).json({ message: 'Product not found' });

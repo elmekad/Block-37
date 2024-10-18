@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import api from '../services/api';
+import Navbar from '../components/Navbar';
 
 const Cart = () => {
   const [cartItems, setCartItems] = useState([]);
@@ -18,6 +19,8 @@ const Cart = () => {
   };
 
   return (
+    <div className="containerNav">
+      <Navbar />
     <div>
       <h1>Cart</h1>
       {cartItems.map(item => (
@@ -27,6 +30,7 @@ const Cart = () => {
           <button onClick={() => removeFromCart(item.productId)}>Remove</button>
         </div>
       ))}
+    </div>
     </div>
   );
 };

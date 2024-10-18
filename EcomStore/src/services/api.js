@@ -1,12 +1,13 @@
 const BASE_URL = 'http://localhost:5000';
+
 const fetchData = async (endpoint, method = 'GET', body = null) => {
   const token = localStorage.getItem('token');
-  
+
   const config = {
     method,
     headers: {
       'Content-Type': 'application/json',
-      Authorization: `Bearer ${token}`
+      // Authorization: `Bearer ${token}`,
     },
   };
 
@@ -19,8 +20,9 @@ const fetchData = async (endpoint, method = 'GET', body = null) => {
   if (!response.ok) {
     throw new Error(`HTTP error! Status: ${response.status}`);
   }
-
-  return await response.json();
+const awaitresponse = await response.json();
+console.log(awaitresponse);
+  return awaitresponse;
 };
 
-export default fetchData
+export default fetchData;

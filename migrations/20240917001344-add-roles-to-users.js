@@ -8,7 +8,7 @@ module.exports = {
     await queryInterface.addColumn('Users', 'roles', {
       type: Sequelize.STRING,
       allowNull: false,
-      defaultValue: 'user', // Set a default role for existing users
+      defaultValue: 'user', 
     });
   },
 

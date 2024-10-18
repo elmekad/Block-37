@@ -17,6 +17,7 @@ app.use(express.json()); // Parse JSON bodies
 app.use(morgan('dev')); // Logging
 app.use(cors()); // Enable CORS (configure if needed for production)
 
+
 // Connect to the Database
 connectDB();
 
@@ -35,10 +36,11 @@ app.use('/api/reviews', reviewRoutes);
 app.use('/api/comments', commentRoutes);
 app.use('/api/orders', orderRoutes);
 app.use('/api/cart', cartRoutes);
-
+console.log("all routes imported");
 // Protected Routes (apply JWT authentication middleware to routes that need protection)
 
-app.use('/api/reviews', authenticateJWT, reviewRoutes);
+app.use('/api/reviews', authenticateJWT.authenticateJWT, reviewRoutes);
+app.use('/api/cart', authenticateJWT.authenticateJWT, cartRoutes);
 
 // Error Handling Middleware
 app.use((err, req, res, next) => {

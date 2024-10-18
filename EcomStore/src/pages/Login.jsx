@@ -2,27 +2,29 @@ import { useState } from 'react';
 import api from '../services/api';
 import { useNavigate } from 'react-router-dom'; // To handle navigation
 import './Login.css';
+// import { post } from '../services/api';
 
+// Main Login Component
 const Login = () => {
   const [formData, setFormData] = useState({ email: '', password: '' });
   const [error, setError] = useState(''); // For handling errors
   const navigate = useNavigate(); // Hook for navigation
 
+  // Handles the form submission when the login button is clicked
   const handleSubmit = async (event) => {
     event.preventDefault();
     try {
-      const response = await api.post('/api/auth/login', formData);
-      localStorage.setItem('token', response.data.token);
+      const response = await api('/api/auth/login', 'POST', formData);
 
-      // Decode the token to get the user info
-      const decodedToken = decodeJWT(response.data.token);
-      const userRole = decodedToken.role;
-
-      if (userRole === 'admin') {
-        navigate('/admin/products'); // Redirect to admin page
+      localStorage.setItem('token', response.token);
+  console.log(response.role, "role");
+      if (response.token === 'admin') {
+        navigate('/components/AdminProductPage'); // Redirect to admin page
       } else {
         navigate('/'); // Redirect to home page
+        console.log('Login successful', response);
       }
+    
     } catch (error) {
       if (error.response && error.response.status === 401) {
         setError('Account does not exist or invalid credentials');
@@ -31,10 +33,11 @@ const Login = () => {
       }
     }
   };
+  
 
   return (
     <div className="login-page">
-      <h1 id="Title">Olive & Oak</h1>
+      
       <div className="block">
         <div className="wrapper">
           <form onSubmit={handleSubmit}>
@@ -57,16 +60,12 @@ const Login = () => {
               />
             </div>
 
-            {error && <p className="error-message" >{error}</p>} 
-            
+            {error && <p className="error-message">{error}</p>}
             <button type="submit" className="btn">Login</button>
 
-            
-
             <div className="register-link">
-              <p id="p">Don't have an account? <br />
-                <a href="/register">Register</a>
-              </p>
+              <p id="p">Don't have an account? <br/>
+              <a href="/register">Register</a></p>
             </div>
           </form>
         </div>

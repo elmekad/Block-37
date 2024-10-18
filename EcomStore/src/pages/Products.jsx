@@ -31,8 +31,8 @@ const Products = () => {
         <div className="products-grid">
           {products.map(product => (
             <div className="product-card" key={product.id}>
+              <img className="product-image" src={product.imageurl} alt={product.name} />
               <h2>{product.name}</h2>
-              <img src={product.image} alt={product.name} />
               <p>{product.description}</p>
             </div>
           ))}
