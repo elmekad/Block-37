@@ -12,7 +12,8 @@ const Login = () => {
 
   // Handles the form submission when the login button is clicked
   const handleSubmit = async (event) => {
-    event.preventDefault();
+    event.pre
+    ventDefault();
     try {
       const response = await api('/api/auth/login', 'POST', formData);
 

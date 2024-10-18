@@ -36,7 +36,9 @@ const Products = () => {
               <p>{product.description}</p>
             </div>
           ))}
-        </div></div>
+            </div>
+            <button type='submit' className='btn'>Add to Cart</button>
+        </div>
       );
     };
   
