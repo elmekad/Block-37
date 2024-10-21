@@ -1,7 +1,5 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import api from '../services/api';
-import Reviews from '../components/Reviews';
 import './Products.css';
 import Navbar from '../components/Navbar';
 
@@ -42,7 +40,6 @@ const Products = () => {
             
             {/* Product Details: Description, Price, and Reviews */}
             <div className="product-detail">
-              {/* <span>{product.description}</span> */}
               <span>${product.price}</span>
             </div>
           </div>

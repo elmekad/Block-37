@@ -1,8 +1,9 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
 import api from '../services/api';
+const { fetchData } = api;
+import { useNavigate } from 'react-router-dom'; // To handle navigation
 import Navbar from '../components/Navbar';
 import './Register.css';
-
 const Register = () => {
   const [formData, setFormData] = useState({ email: '', password: '' });
 
@@ -11,7 +12,7 @@ const Register = () => {
   
     try {
       // Send the request to the API
-      const response = await api('api/auth/register', 'POST', formData);
+      const response = await fetchData('api/auth/register', 'POST', formData);
   
       // Check if the registration was successful
       if (response && response.token) {

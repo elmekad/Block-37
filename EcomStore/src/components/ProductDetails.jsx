@@ -1,38 +1,67 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import fetchData from '../services/api';
+import api from '../services/api';
+const { fetchData } = api;
 import './ProductDetails.css';
 import Navbar from './Navbar';
-const ProductDetails = () => {
-  const { id } = useParams(); // This will capture the product ID from the URL.
+
+const ProductImage = ({ id }) => {
+  const [product, setProduct] = useState(null);
+
+  useEffect(() => {
+    const fetchProduct = async () => {
+      try {
+        const response = await fetchData(`api/products/${id}`, 'GET');
+        setProduct(response);
+      } catch (error) {
+        console.error('Error fetching product:', error);
+      }
+    };
+
+    fetchProduct();
+  }, [id]);
+
+  if (!product) {
+    return <div>Loading...</div>;
+  }
+
+  return (
+    <img src={product.imageurl} alt={product.name} />
+  );
+};
+
+const ProductDetails = ({ id, renderImageOnly }) => {
+  const params = useParams();
+  const productId = id ? id : params.id;
+
+  if (!productId) {
+    return <div>Error: Product ID not found</div>;
+  }
+
   const [product, setProduct] = useState(null);
   const [reviews, setReviews] = useState([]);
   const [quantity, setQuantity] = useState(1);
 
   useEffect(() => {
-    console.log('Product ID:', id);
     const fetchProductDetails = async () => {
       try {
-        // Fetch the product details.
-        const productData = await fetchData(`api/products/${id}`, 'GET');
+        const productData = await fetchData(`api/products/${productId}`, 'GET');
         setProduct(productData);
 
-        // Fetch reviews for the product.
-        const reviewsData = await fetchData(`api/reviews/${id}`, 'GET');
+        const reviewsData = await fetchData(`api/reviews/${productId}`, 'GET');
         setReviews(reviewsData);
-
       } catch (error) {
-        console.error('Failed to load product details:', error);
+        console.error('Error fetching product details:', error);
       }
     };
 
     fetchProductDetails();
-  }, [id]);
+  }, [productId]);
 
   const handleAddToCart = async () => {
     try {
-      const response = await fetchData(`api/cart/${id}`, 'POST', {
-        productId: id,
+      const response = await fetchData(`api/cart/${productId}`, 'POST', {
+        productId: productId,
         quantity,
       });
       console.log('Added to cart:', response);
@@ -41,49 +70,28 @@ const ProductDetails = () => {
     }
   };
 
-
-  if (!product) {
-    return <div>Loading...</div>;
+  if (renderImageOnly) {
+    return (
+      <ProductImage id={productId} />
+    );
   }
 
   return (
-    
     <div className="product-details-container">
-    <Navbar />
-    <div className="product-details">
-      <h1>{product.name}</h1>
-      <img src={product.imageurl} alt={product.name} />
-      <div className="product-description">
-        <p>{product.description}</p>
-        <p>Price: ${product.price}</p>
-        <div className="add-to-cart">
-          <label htmlFor="quantity">Quantity:</label>
-          <input
-            type="number"
-            id="quantity"
-            min="1"
-            value={quantity}
-            onChange={(e) => setQuantity(parseInt(e.target.value))}
-          />
-          <button onClick={handleAddToCart}>Add to Cart</button>
+      <Navbar />
+      <div className="product-details">
+        <h1>{product?.name}</h1>
+        <ProductImage id={productId} />
+        <div className="product-description">
+          <p>{product?.description}</p>
+          <p>Price: ${product?.price}</p>
+          <div className="add-to-cart">
+            <button onClick={handleAddToCart}>Add to Cart</button>
+          </div>
         </div>
       </div>
     </div>
-    <div className="reviews">
-      <h2 id="reviews-title">Reviews</h2>
-      {reviews.length > 0 ? (
-        reviews.map((review) => (
-          <div key={review.id}>
-            <p id="review-rating">{review.rating} / 5</p>
-            <span id="review-text">{review.text}</span>
-            <p id="review-author">- {review.user ? review.user.name : ''}</p>
-          </div>
-        ))
-      ) : (
-        <p>No reviews yet.</p>
-      )}
-    </div>
-  </div>
-);
+  );
 };
+
 export default ProductDetails;

@@ -1,8 +1,9 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
 import api from '../services/api';
+const { fetchData } = api;
 import { useNavigate } from 'react-router-dom'; // To handle navigation
 import './Login.css';
-// import { post } from '../services/api';
+import Navbar from '../components/Navbar';
 
 // Main Login Component
 const Login = () => {
@@ -12,20 +13,22 @@ const Login = () => {
 
   // Handles the form submission when the login button is clicked
   const handleSubmit = async (event) => {
-    event.pre
-    ventDefault();
+    event.preventDefault();
     try {
-      const response = await api('api/auth/login', 'POST', formData);
-
-      localStorage.setItem('token', response.token);
-  console.log(response.role, "role");
-      if (response.token === 'admin') {
-        navigate('/components/AdminProductPage'); // Redirect to admin page
-      } else {
-        navigate('/'); // Redirect to home page
-        console.log('Login successful', response);
+      const response = await fetchData('api/auth/login', 'POST', formData);
+      if (response.token) {
+        console.log(response.id);
+        localStorage.setItem('token', response.token);
+        if (response.data && response.data.id) {
+          console.log(response.id);
+          localStorage.setItem('userId', response.data.id);
+        }
+        if (response.data && response.data.role === 'admin') {
+          navigate('/components/AdminProductPage'); // Redirect to admin page
+        } else {
+          navigate('/'); // Redirect to home page
+        }
       }
-    
     } catch (error) {
       if (error.response && error.response.status === 401) {
         setError('Account does not exist or invalid credentials');
@@ -34,11 +37,10 @@ const Login = () => {
       }
     }
   };
-  
 
   return (
     <div className="login-page">
-      
+      <Navbar />
       <div className="block">
         <div className="wrapper">
           <form onSubmit={handleSubmit}>

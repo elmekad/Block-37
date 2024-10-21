@@ -25,4 +25,23 @@ console.log(awaitresponse);
   return awaitresponse;
 };
 
-export default fetchData;
+const deleteData = async (endpoint) => {
+  const token = localStorage.getItem('token');
+
+  const config = {
+    method: 'DELETE',
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  };
+
+  const response = await fetch(`${BASE_URL}${endpoint}`, config);
+
+  if (!response.ok) {
+    throw new Error(`HTTP error! Status: ${response.status}`);
+  }
+
+  return response;
+};
+
+export default { fetchData, deleteData }; 

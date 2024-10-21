@@ -51,8 +51,13 @@ background-color: #f9f4ea;
 .reviews span {
     font-size: 30px;
 }
+#review-text {
+    position: relative;
+    top: -77px;
+    left: 70px;}
 .reviews p {
     font-size: 20px;
+
 }
 #reviews-title {
     font-size: 50px;
@@ -61,6 +66,9 @@ background-color: #f9f4ea;
 }
 #review-rating {
     position: relative;
+    top: -50px;
+    left: 20px;
+    
    
 }
 .add-to-cart {
