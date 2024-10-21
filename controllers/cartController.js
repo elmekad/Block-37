@@ -3,6 +3,7 @@ const Product = require('../models/Product');
 
 // Get the user's cart// Get the user's cart
 exports.getCart = async (req, res) => {
+  console.log('Fetching cart for user:', req.user);
   try {
     console.log('Fetching cart for user:', req.user.id);
     const cart = await Cart.findOne({ where: { userId: req.user.id } });
@@ -23,8 +24,10 @@ exports.addToCart = async (req, res) => {
   try {
     // Find or create the user's cart
     let cart = await Cart.findOne({ where: { userId: req.user.id } });
+    
     if (!cart) {
       cart = await Cart.create({ userId: req.user.id, items: [] });  // Initialize with empty items array
+      console.log('Created new cart for user:', req.user.id);
     }
 
     // Ensure cart.items is always an array
@@ -45,9 +48,17 @@ exports.addToCart = async (req, res) => {
     } else {
       cart.items.push({ productId, quantity });
     }
+  
+    
+ // Update the cart with the new items array
+ await Cart.update({ items: cart.items }, { where: { id: cart.id } });
 
-    // Save the updated cart
-    await cart.save();
+ // Fetch the updated cart
+ cart = await Cart.findOne({ where: { userId: req.user.id } });
+
+
+
+
     res.status(200).json({ message: 'Item added to cart', cart });
   } catch (err) {
     console.error('Error adding item to cart:', err);
@@ -59,12 +70,15 @@ exports.addToCart = async (req, res) => {
 
 // Remove an item from the cart
 exports.removeFromCart = async (req, res) => {
-  const { itemId } = req.params;
+  
+  const { userId,itemId } = req.params;
+  console.log('removeFromCart: userId:', userId);
+  console.log('removeFromCart: itemId:', itemId);
   try {
     console.log('Removing item from cart for user:', req.user.id);
     
     // Find the user's cart
-    const cart = await Cart.findOne({ where: { userId: req.user.id } });
+    const cart = await Cart.findOne({ where: { userId: userId } });
     if (!cart) {
       console.log('Cart not found for user:', req.user.id);
       return res.status(404).json({ message: 'Cart not found' });
@@ -80,7 +94,9 @@ exports.removeFromCart = async (req, res) => {
     }
 
     // Remove the item from the cart
+    console.log('Before filtering:', cart.items);
     cart.items = cart.items.filter(item => item.productId.toString() !== itemId);
+    console.log('After filtering:', cart.items);
 
     // Save the updated cart
     await cart.save();

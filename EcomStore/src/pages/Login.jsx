@@ -15,7 +15,7 @@ const Login = () => {
     event.pre
     ventDefault();
     try {
-      const response = await api('/api/auth/login', 'POST', formData);
+      const response = await api('api/auth/login', 'POST', formData);
 
       localStorage.setItem('token', response.token);
   console.log(response.role, "role");

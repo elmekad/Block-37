@@ -6,12 +6,7 @@ import Login from './pages/Login';
 import Products from './pages/Products';
 import Cart from './components/Cart';
 import AdminProductPage from './components/AdminProductPage';
-
-// Add the route in your App.jsx
-
-
-// import './App.css';
-// import './pages/Home.css';
+import ProductDetails from './components/ProductDetails';
 
 const App = () => {
   return (
@@ -25,6 +20,8 @@ const App = () => {
         <Route path="/cart" element={<Cart />} />
         <Route path="/components/AdminProductPage" element={<AdminProductPage />} />
         <Route path="*" element={<Home />} />
+        <Route path="/product/:id" element={<ProductDetails />} />
+        <Route path="/ProductDetails" element={<ProductDetails />} />
       </Routes>
     </Router>
     </div>

@@ -11,7 +11,7 @@ const Register = () => {
   
     try {
       // Send the request to the API
-      const response = await api('/api/auth/register', 'POST', formData);
+      const response = await api('api/auth/register', 'POST', formData);
   
       // Check if the registration was successful
       if (response && response.token) {

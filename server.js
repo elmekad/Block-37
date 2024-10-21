@@ -30,17 +30,17 @@ const orderRoutes = require('./routes/order');
 const cartRoutes = require('./routes/cart');
 
 // // Use Routes
-app.use('/api/auth', authRoutes);
+app.use('/api/auth', authenticateJWT.authenticateJWT, authRoutes);
 app.use('/api/products', productRoutes);
-app.use('/api/reviews', reviewRoutes);
+app.use('/api/reviews', authenticateJWT.authenticateJWT, reviewRoutes);
 app.use('/api/comments', commentRoutes);
-app.use('/api/orders', orderRoutes);
-app.use('/api/cart', cartRoutes);
+app.use('/api/orders', authenticateJWT.authenticateJWT, orderRoutes);
+app.use('/api/cart', authenticateJWT.authenticateJWT, cartRoutes);
 console.log("all routes imported");
 // Protected Routes (apply JWT authentication middleware to routes that need protection)
 
-app.use('/api/reviews', authenticateJWT.authenticateJWT, reviewRoutes);
-app.use('/api/cart', authenticateJWT.authenticateJWT, cartRoutes);
+// app.use('/api/reviews', authenticateJWT.authenticateJWT, reviewRoutes);
+// app.use('/api/cart', authenticateJWT.authenticateJWT, cartRoutes);
 
 // Error Handling Middleware
 app.use((err, req, res, next) => {

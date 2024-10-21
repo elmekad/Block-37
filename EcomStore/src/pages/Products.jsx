@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import api from '../services/api';
 import Reviews from '../components/Reviews';
 import './Products.css';
@@ -25,21 +26,31 @@ const Products = () => {
   }, []);
 
   
-    return (
-        <div className="containerNav">
+  return (
+    <div className="containerNav">
       <Navbar />
-        <div className="products-grid">
-          {products.map(product => (
-            <div className="product-card" key={product.id}>
+      <div className="products-grid">
+        {products.map(product => (
+          <div className="product-wrapper" key={product.id}>
+            {/* Product Card with Image and Name */}
+            <div className="product-card">
+            <Link to={`/product/${product.id}`}>
               <img className="product-image" src={product.imageurl} alt={product.name} />
+            </Link>
               <h2>{product.name}</h2>
-              <p>{product.description}</p>
             </div>
-          ))}
+            
+            {/* Product Details: Description, Price, and Reviews */}
+            <div className="product-detail">
+              {/* <span>{product.description}</span> */}
+              <span>${product.price}</span>
             </div>
-            <button type='submit' className='btn'>Add to Cart</button>
-        </div>
-      );
-    };
+          </div>
+        ))}
+      </div>
   
+      <button type='submit' className='btn'>Add to Cart</button>
+    </div>
+  );
+};
   export default Products;

@@ -1,4 +1,4 @@
-const BASE_URL = 'http://localhost:5000';
+const BASE_URL = 'http://localhost:5000/';
 
 const fetchData = async (endpoint, method = 'GET', body = null) => {
   const token = localStorage.getItem('token');
@@ -7,7 +7,7 @@ const fetchData = async (endpoint, method = 'GET', body = null) => {
     method,
     headers: {
       'Content-Type': 'application/json',
-      // Authorization: `Bearer ${token}`,
+      Authorization: `Bearer ${token}`,
     },
   };
 
