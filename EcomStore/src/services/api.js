@@ -1,4 +1,4 @@
-const BASE_URL = 'http://localhost:5000/';
+const BASE_URL = 'https://ecom-store-lcyc.onrender.com/';
 
 const fetchData = async (endpoint, method = 'GET', body = null) => {
   const token = localStorage.getItem('token');

@@ -8,7 +8,7 @@ const Products = () => {
 
   const fetchProducts = async () => {
     try {
-      const response = await fetch('http://localhost:5000/api/products');
+      const response = await fetch('https://ecom-store-lcyc.onrender.com/api/products');
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
