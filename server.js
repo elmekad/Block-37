@@ -30,7 +30,7 @@ const orderRoutes = require('./routes/order');
 const cartRoutes = require('./routes/cart');
 
 // // Use Routes
-app.use('/api/auth', authenticateJWT.authenticateJWT, authRoutes);
+app.use('/api/auth', authRoutes);
 app.use('/api/products', productRoutes);
 app.use('/api/reviews', authenticateJWT.authenticateJWT, reviewRoutes);
 app.use('/api/comments', commentRoutes);
