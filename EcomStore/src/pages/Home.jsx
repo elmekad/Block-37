@@ -2,7 +2,7 @@ import React from 'react';
 import './home.css'; 
 import Navbar from '../components/Navbar';
 import Nfolded from '../photos/Nfolded.avif';
-import Leaf from '../photos/Leaf2.jpg';
+import Leaf from '../photos/leaf2.jpg';
 
 const Home = () => {
   return (
