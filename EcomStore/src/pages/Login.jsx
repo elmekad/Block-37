@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import api from '../services/api';
 const { fetchData } = api;
 import { useNavigate } from 'react-router-dom'; // To handle navigation
-import './Login.css';
+import './login.css';
 import Navbar from '../components/Navbar';
 
 // Main Login Component
