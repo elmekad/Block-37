@@ -1,5 +1,5 @@
 import React from 'react';
-import '../pages/Home.css'; 
+import './Home.css'; 
 import Navbar from '../components/Navbar';
 import Nfolded from '../photos/Nfolded.avif';
 import Leaf from '../photos/Leaf2.jpg';

@@ -17,7 +17,7 @@ app.use(express.json()); // Parse JSON bodies
 app.use(morgan('dev')); // Logging
 app.use(cors()); // Enable CORS (configure if needed for production)
 
-
++
 // Connect to the Database
 connectDB();
 
